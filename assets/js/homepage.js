@@ -5,25 +5,24 @@ var repoSearchTerm = document.querySelector("#repo-search-term");
 
 //function to access github server
 var getUserRepos = function(user) {
+    // format the github api url
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
-    if (repos.length === 0) {
-        repoContainerEl.textContent = "No respositories found."
-        return;
-    }
+  
+    // make a request to the url
     fetch(apiUrl)
         .then(function(response) {
-        if (response.ok) {
-            response.json().then(function(data) {
-            displayRepos(data, user);
-            });
-        } else {
-            alert("Error: " + response.statusText);
-        }
-    })
-    .catch(function(error) {
-        alert("Unable to connect to GitHub")
-    });
-}; 
+            if (response.ok) {
+                response.json().then(function(data) {
+                    displayRepos(data, user);
+                });
+            } else {
+                alert("Error: " + response.statusText);
+            }
+        })
+        .catch(function(error) {
+            alert("Unable to connect to GitHub");
+        });
+    };
 
 //function to add functionality to form
 var formSubmitHandler = function(event) {
@@ -40,6 +39,11 @@ var formSubmitHandler = function(event) {
 
 //function to display username and repos
 var displayRepos = function(repos,searchTerm) {
+    if (repos.length === 0) {
+        repoContainerEl.textContent = "No repositories found.";
+        return;
+    }
+
     repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
 
@@ -64,5 +68,7 @@ var displayRepos = function(repos,searchTerm) {
         repoEl.appendChild(statusEl)
     }
 };
+
+
 
 userFormEl.addEventListener("submit", formSubmitHandler);
